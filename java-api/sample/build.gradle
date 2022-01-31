@@ -1,0 +1,33 @@
+plugins {
+    id 'java'
+}
+
+group 'ovh.vicart.messaging'
+version '1.0'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.7.0'
+    implementation project(':messaging')
+}
+
+task createProperties(dependsOn: processResources) {
+    doLast {
+        new File("$buildDir/resources/main/version.properties").withWriter {w ->
+            Properties p = new Properties()
+            p['version'] = project.version.toString()
+            p.store(w, null)
+        }
+    }
+}
+
+classes {
+    dependsOn createProperties
+}
+
+test {
+    useJUnitPlatform()
+}

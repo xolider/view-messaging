@@ -18,11 +18,11 @@
                 </v-card-actions>
             </v-card>
         </v-dialog>
-        <v-container fluid style="height: 100%">
+        <v-container fluid>
             <v-row>
                 <v-col class="top-col rounded">
                     <h4 class="text-h4 text-center">
-                        Vous êtes connecté sous: {{username}}
+                        Vous êtes connecté sous: <span class="blue--text">{{username}}</span>
                         <v-tooltip bottom>
                             <template v-slot:activator="{on, attr}">
                                 <v-btn class="float-right" v-bind="attr" v-on="on" icon @click="disconnect"><v-icon>mdi-logout</v-icon></v-btn>
@@ -32,16 +32,21 @@
                     </h4>
                 </v-col>
             </v-row>
+            <v-row>
+                <v-col>
+                    <p class="text-subheader">Conversation avec {{contact.username}}</p>
+                </v-col>
+            </v-row>
             <v-row class="messaging-row">
                 <v-col></v-col>
             </v-row>
-            <v-row>
+            <v-row class="align-center">
                 <v-col cols="11">
-                    <v-text-field hide-details="auto" label="Message" placeholder="Entrez votre message" outlined></v-text-field>
+                    <v-text-field hide-details="auto" v-model="messageField" label="Message" placeholder="Entrez votre message" outlined></v-text-field>
                 </v-col>
                 <v-col cols="1">
-                    <v-btn icon>
-                        <v-icon>mdi-send</v-icon>
+                    <v-btn icon :disabled="messageField === ''" elevation="1">
+                        <v-icon color="blue">mdi-send</v-icon>
                     </v-btn>
                 </v-col>
             </v-row>
@@ -52,9 +57,11 @@
 <script>
 
 import store from '../store'
+import api from '../api'
 
 export default {
     name: 'Home',
+    props: ['contact'],
     computed: {
         username: () => {
             return store.getters.getUsername
@@ -66,7 +73,9 @@ export default {
     data() {
         return {
             usernameDialog: false,
-            usernameField: ''
+            usernameField: '',
+            messageField: '',
+            conversation: []
         }
     },
     mounted() {
@@ -78,10 +87,16 @@ export default {
         saveUsername() {
             store.dispatch('setUsername', this.usernameField)
             this.usernameDialog = false
+            api.postUser(this.usernameField)
         },
         disconnect() {
             store.dispatch('resetUsername')
             this.usernameDialog = true
+        }
+    },
+    watch: {
+        contact(newVal, oldVal) {
+            api.getMessages()
         }
     }
 }
@@ -93,7 +108,7 @@ export default {
 }
 
 .messaging-row {
-    height: 77vh;
+    height: 71vh;
     border-bottom: 1px solid silver;
 }
 </style>
