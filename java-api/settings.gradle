@@ -11,4 +11,7 @@ rootProject.name = 'messaging'
 include('lib')
 project(':lib').name = "messaging"
 include('sample')
+include('messaging-kt')
+project(':messaging-kt').name = "messaging-kt"
+include('sample-kt')
 

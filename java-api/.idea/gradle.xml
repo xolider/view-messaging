@@ -11,7 +11,9 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/lib" />
+            <option value="$PROJECT_DIR$/messaging-kt" />
             <option value="$PROJECT_DIR$/sample" />
+            <option value="$PROJECT_DIR$/sample-kt" />
           </set>
         </option>
       </GradleProjectSettings>

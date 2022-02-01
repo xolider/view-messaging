@@ -1,5 +1,6 @@
 plugins {
-    id 'java'
+    id 'application'
+    id 'org.openjfx.javafxplugin' version '0.0.11'
 }
 
 group 'ovh.vicart.messaging'
@@ -14,18 +15,13 @@ dependencies {
     implementation project(':messaging')
 }
 
-task createProperties(dependsOn: processResources) {
-    doLast {
-        new File("$buildDir/resources/main/version.properties").withWriter {w ->
-            Properties p = new Properties()
-            p['version'] = project.version.toString()
-            p.store(w, null)
-        }
-    }
+application {
+    mainClassName = 'ovh.vicart.messaging.sample.Main'
 }
 
-classes {
-    dependsOn createProperties
+javafx {
+    version = '17'
+    modules = ['javafx.base', 'javafx.controls', 'javafx.fxml', 'javafx.graphics']
 }
 
 test {
